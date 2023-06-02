@@ -114,4 +114,19 @@ public class UserService {
         }
     }
 
+    public void modifyPhoneNumber(long userId, String phoneNumber) {
+        log.info("[UserService.modifyPhoneNumber]");
+
+        validatePhoneNumber(phoneNumber);
+        int affectedRows = userDao.modifyPhoneNumber(userId, phoneNumber);
+        if(affectedRows != 1){
+            throw new DatabaseException(DATABASE_ERROR);
+        }
+    }
+
+    private void validatePhoneNumber(String phoneNumber) {
+        if(userDao.hasDuplicatePhoneNumber(phoneNumber)){
+            throw new UserException(DUPLICATE_PHONE_NUMBER);
+        }
+    }
 }

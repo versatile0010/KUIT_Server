@@ -99,4 +99,17 @@ public class UserController {
         return new BaseResponse<>(userService.getUsers(nickname, email, status));
     }
 
+    /**
+     * 전화번호 변경
+     */
+    @PatchMapping("/{userId}/phone_number")
+    public BaseResponse<String> modifyPhoneNumber(@PathVariable long userId,
+                                               @Validated @RequestBody PatchPhoneNumberRequest patchPhoneNumberRequest, BindingResult bindingResult) {
+        log.info("[UserController.modifyPhoneNumber]");
+        if (bindingResult.hasErrors()) {
+            throw new UserException(INVALID_USER_VALUE, getErrorMessages(bindingResult));
+        }
+        userService.modifyPhoneNumber(userId, patchPhoneNumberRequest.getPhoneNumber());
+        return new BaseResponse<>(null);
+    }
 }

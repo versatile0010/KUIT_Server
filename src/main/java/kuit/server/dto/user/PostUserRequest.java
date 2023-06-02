@@ -14,10 +14,28 @@ import org.springframework.lang.Nullable;
 @NoArgsConstructor
 public class PostUserRequest {
 
+    @NotBlank(message = "name: {NotBlank}")
+    @Length(max = 20, message = "name: 최대 {max}자리까지 가능합니다")
+    private String name;
+
+    @Nullable
+    @Length(max = 20, message = "nickname: 최대 {max}자리까지 가능합니다")
+    private String nickname;
+
+    @Nullable
+    @Length(max = 500, message = "profileImage: 최대 {max}자리까지 가능합니다")
+    private String profileImage;
+
+    @NotBlank(message = "phoneNumber: {NotBlank}")
+    @Length(max = 30, message = "phoneNumber: 최대 {max}자리까지 가능합니다")
+    private String phoneNumber;
+
     @Email(message = "email: 이메일 형식이어야 합니다")
     @NotBlank(message = "email: {NotBlank}")
-    @Length(max = 50, message = "email: 최대 {max}자리까지 가능합니다")
+    @Length(max = 30, message = "email: 최대 {max}자리까지 가능합니다")
     private String email;
+
+    private String grade;
 
     @NotBlank(message = "password: {NotBlank}")
     @Length(min = 8, max = 20,
@@ -26,19 +44,13 @@ public class PostUserRequest {
             message = "password: 대문자, 소문자, 특수문자가 적어도 하나씩은 있어야 합니다")
     private String password;
 
-    @NotBlank(message = "phoneNumber: {NotBlank}")
-    @Length(max = 20, message = "phoneNumber: 최대 {max}자리까지 가능합니다")
-    private String phoneNumber;
+    @Nullable
+    private Double latitude;
 
     @Nullable
-    @Length(max = 25, message = "nickname: 최대 {max}자리까지 가능합니다")
-    private String nickname;
-
-    @Nullable
-    private String profileImage;
+    private Double longitude;
 
     public void resetPassword(String encodedPassword) {
         this.password = encodedPassword;
     }
-
 }

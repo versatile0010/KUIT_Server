@@ -37,9 +37,15 @@ public class UserDao {
         return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, param, boolean.class));
     }
 
+    public boolean hasDuplicatePhoneNumber(String phoneNumber) {
+        String sql = "select exists(select phone_number from user where phone_number=:phone_number and status in ('active', 'dormant'))";
+        Map<String, Object> param = Map.of("phone_number", phoneNumber);
+        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, param, boolean.class));
+    }
+
     public long createUser(PostUserRequest postUserRequest) {
-        String sql = "insert into user(email, password, phone_number, nickname, profile_image) " +
-                "values(:email, :password, :phoneNumber, :nickname, :profileImage)";
+        String sql = "insert into user(name, email, password, phone_number, nickname, profile_image) " +
+                "values(:name, :email, :password, :phoneNumber, :nickname, :profileImage)";
 
         SqlParameterSource param = new BeanPropertySqlParameterSource(postUserRequest);
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -68,6 +74,14 @@ public class UserDao {
         String sql = "update user set nickname=:nickname where user_id=:user_id";
         Map<String, Object> param = Map.of(
                 "nickname", nickname,
+                "user_id", userId);
+        return jdbcTemplate.update(sql, param);
+    }
+
+    public int modifyPhoneNumber(long userId, String phoneNumber) {
+        String sql = "update user set phone_number=:phone_number where user_id=:user_id";
+        Map<String, Object> param = Map.of(
+                "phone_number", phoneNumber,
                 "user_id", userId);
         return jdbcTemplate.update(sql, param);
     }
